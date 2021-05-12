@@ -20,6 +20,7 @@ public class TestModel {
 //		for (Country country : stats.keySet())
 //			System.out.format("%s %d\n", country, stats.get(country));		
 		
+		model.getStatiraggiungibili(new Country(305, "AUS", "Austria"));
 	}
 
 }

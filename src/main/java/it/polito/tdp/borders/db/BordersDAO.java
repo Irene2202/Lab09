@@ -80,7 +80,8 @@ public class BordersDAO {
 		String sql="SELECT c.state1no AS id_vertice "
 				+"FROM contiguity c "
 				+"WHERE c.year<=? AND conttype=1 "
-				+"GROUP BY c.state1no";
+				+"GROUP BY c.state1no "
+				+"ORDER BY c.state1ab";
 		
 		List<Country> result=new LinkedList<>();
 		

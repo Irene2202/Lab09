@@ -2,12 +2,15 @@
 package it.polito.tdp.borders;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.borders.model.Country;
 import it.polito.tdp.borders.model.Model;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -27,6 +30,9 @@ public class FXMLController {
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
 
+    @FXML
+    private ComboBox<Country> cmbCountry;
+    
     @FXML
     void doCalcolaConfini(ActionEvent event) {
     	txtResult.clear();
@@ -56,13 +62,35 @@ public class FXMLController {
     	for(Country c:model.getGrafo().vertexSet()) {
     		txtResult.appendText("\n"+c.getStateNme()+" "+model.getGrafo().degreeOf(c));
     	}
+    	
+    	cmbCountry.getItems().addAll(model.getGrafo().vertexSet());
+    }
+    
+    @FXML
+    void doRaggiungibili(ActionEvent event) {
+    	txtResult.clear();
+    	Country country=cmbCountry.getValue();
+    	
+    	if(country==null) {
+    		txtResult.setText("Selezionare una Nazione");
+    		return;
+    	}
+    	
+    	List<Country> paesi=model.getStatiraggiungibili(country);
+    	if(paesi.size()==1) {
+    		txtResult.setText("La nazione non ha stati ragiungibili");
+    		return;
+    	}
+    	txtResult.setText("Stati raggiungibili: "+paesi.size());
+    	for(int i=0; i<paesi.size(); i++)
+    		txtResult.appendText("\n"+paesi.get(i).getStateNme());
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert txtAnno != null : "fx:id=\"txtAnno\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Scene.fxml'.";
-
+        assert cmbCountry != null : "fx:id=\"cmbCountry\" was not injected: check your FXML file 'Scene.fxml'.";
     }
     
     public void setModel(Model model) {
