@@ -4,6 +4,7 @@ package it.polito.tdp.borders;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.borders.model.Country;
 import it.polito.tdp.borders.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,7 +29,33 @@ public class FXMLController {
 
     @FXML
     void doCalcolaConfini(ActionEvent event) {
-
+    	txtResult.clear();
+    	String annoS=txtAnno.getText();
+    	int anno;
+    	if(annoS.length()==0) {
+    		txtResult.setText("Anno non inserito");
+    		return;
+    	}
+    	
+    	try {
+    		anno=Integer.parseInt(annoS);
+    		if(anno<1816 || anno>2016) {
+    			txtResult.setText("L'anno deve essere compreso tra il 1816 e il 2016");
+        		return;
+    		}
+    	} catch (NumberFormatException e) {
+    		txtResult.setText("Formato anno non valido");
+    		return;
+    	}
+    	
+    	model.creaGrafo(anno);
+    	
+    	
+    	txtResult.setText("Grafo creato con "+model.getGrafo().vertexSet().size()+" vertici e "+model.getGrafo().edgeSet().size()+" archi.\n");
+    	txtResult.appendText("Numero componenti connesse: "+model.getNumConnessioni());
+    	for(Country c:model.getGrafo().vertexSet()) {
+    		txtResult.appendText("\n"+c.getStateNme()+" "+model.getGrafo().degreeOf(c));
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
